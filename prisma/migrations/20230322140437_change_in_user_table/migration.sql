@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `address` VARCHAR(191) NULL,
+    ADD COLUMN `batch` INTEGER NULL,
+    ADD COLUMN `father` VARCHAR(191) NULL,
+    ADD COLUMN `nationality` VARCHAR(191) NOT NULL DEFAULT 'INDIAN';
