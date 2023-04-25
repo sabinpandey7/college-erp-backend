@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
+const bcrypt = require("bcryptjs")
 
 const getUsers = async (req, res) => {
   const { id, branch, batch, role, name } = req.query
@@ -248,6 +249,37 @@ const getUserAttendence = async (req, res) => {
   }
 }
 
+const changePassword = async (req, res) => {
+  const { password } = req.body
+  const id = Number.parseInt(req.params.id)
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: id,
+      },
+    })
+    if (!user) {
+      res.status(404).json({ msg: "id not found" })
+    }
+    if (req.user.id != id && !req.user.isAdmin) {
+      res.status(403).json({ msg: "forbidden" })
+    }
+    const hashedPassword = bcrypt.hashSync(password)
+
+    await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    })
+    res.status(200).json({ msg: "success" })
+  } catch (error) {
+    res.status(404).json({ msg: error.message })
+  }
+}
+
 module.exports = {
   updateUser,
   getUsers,
@@ -256,4 +288,5 @@ module.exports = {
   getSummary,
   getUserAssignment,
   getUserAttendence,
+  changePassword,
 }

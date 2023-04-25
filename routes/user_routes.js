@@ -6,6 +6,7 @@ const {
   updateUser,
   getUserAssignment,
   getUserAttendence,
+  changePassword,
   deleteUser,
 } = require("../controller/user")
 const {
@@ -23,5 +24,6 @@ router
   .delete(verifyAdmin, deleteUser)
 router.route("/:id/assignment").get(verifyUser, getUserAssignment)
 router.route("/:id/attendence").get(verifyUser, getUserAttendence)
+router.route("/:id/changepassword").post(verifyUser, changePassword)
 
 module.exports = router
