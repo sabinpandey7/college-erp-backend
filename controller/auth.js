@@ -76,6 +76,9 @@ const register = async (req, res) => {
       return res.status(400).json({ msg: "Id already exists" })
     }
 
+    if (id > 4294967295) {
+      return res.status(400).json({ msg: "Id must be less than 4294967295" })
+    }
     const hashedPassword = bcrypt.hashSync(password)
 
     const user = await prisma.user.create({
