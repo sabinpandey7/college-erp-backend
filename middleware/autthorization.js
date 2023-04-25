@@ -27,7 +27,7 @@ const verifyUser = async (req, res, next) => {
       },
     })
     if (!user) {
-      res.status(401).json({ msg: "user not found" })
+      return res.status(401).json({ msg: "user not found" })
     }
     req.user = user
   } catch (e) {

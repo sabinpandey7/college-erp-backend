@@ -173,11 +173,13 @@ const getSummary = async (req, res) => {
       indian: Number.parseInt(item.indian),
       international: Number.parseInt(item.international),
     }))
+
     return res
       .status(200)
       .json({ students: students, teacher: teacher, totals: totals })
   } catch (error) {
-    return res.status(400).json({ msg: error.message })
+    console.log(error)
+    // return res.status(400).json({ msg: error.message })
   }
 }
 
