@@ -25,7 +25,7 @@ const getUsers = async (req, res) => {
     query = `${id}%`
   }
   try {
-    const users = !id
+    let users = !id
       ? await prisma.user.findMany({
           where: {
             ...match,
@@ -47,6 +47,17 @@ const getUsers = async (req, res) => {
           take: 20,
         })
       : await prisma.$queryRaw`SELECT id ,department,branch,name,isAdmin FROM user where id LIKE ${query} LIMIT 20`
+
+    //problem: raw query converting int to bigint
+    //solution: map bigint to int again
+    if (id) {
+      users = users.map((user) => {
+        return {
+          ...user,
+          id: Number.parseInt(user.id),
+        }
+      })
+    }
 
     return res.status(200).json(users)
   } catch (error) {
